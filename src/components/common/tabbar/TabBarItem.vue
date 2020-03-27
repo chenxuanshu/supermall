@@ -53,10 +53,11 @@
 		text-align: center;
 		height: 49px;
 	}
+	
 	.tab-bar-item img{
 		height: 25px;
 		width: 25px;
-		margin-top: 3px;
+		margin-top: 2px;
 		margin-bottom: 2px;
 		vertical-align: middle;
 	}
