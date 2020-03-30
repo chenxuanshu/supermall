@@ -1,6 +1,6 @@
 <template>
 	<div class="tab-control">
-		<div class="tab-control-item" :class="{active:index==acitveIndex}" 
+		<div class="tab-control-item" :class="{active:index==activeIndex}" 
 		v-for="(item,index) in tabControlTitle" :key=index @click="isActive(index)">
 			<span>{{item}}</span>
 		</div>
@@ -13,7 +13,7 @@
 	export default {
 		name: 'TabControl',
 		data(){return {
-			acitveIndex: 0
+			activeIndex: 0
 		}},
 		props: {
 			tabControlTitle: {
@@ -23,7 +23,7 @@
 		},
 		methods: {
 			isActive(index){
-				this.acitveIndex = index
+				this.activeIndex = index
 				this.$emit('tabClick',index)
 			}
 		}
@@ -39,10 +39,6 @@
 		background-color: white;
 		font-size: 15px;
 		line-height: 35px;
-		position: sticky;
-		left: 0;
-		right: 0;
-		top: 45px;
 		box-shadow: 0 1px 1px rgba(100,100,100,.2);
 		z-index: 99;
 	}

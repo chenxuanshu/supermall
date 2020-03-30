@@ -25,10 +25,6 @@
 		height: 44px;
 		text-align: center;
 		box-shadow: 0 1px 1px rgb(100,100,100);
-		position: fixed;
-		left: 0;
-		right: 0;
-		top: 0;
 		z-index: 99;
 	}
 	.left,.right {

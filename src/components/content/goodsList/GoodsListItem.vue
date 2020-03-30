@@ -1,6 +1,6 @@
 <template>
-	<div class="goods-list-item">
-		<img :src="good.show.img">
+	<div class="goods-list-item" @click="toDetail">
+		<img :src="good.show.img" @load="goodImgLoad">
 		<div class="goods-info">
 			<p>{{good.title}}</p>
 			<span class="price">{{rmbPrice}}</span>
@@ -25,6 +25,19 @@
 		computed:{
 			rmbPrice(){
 				return '￥'+this.good.price
+			}
+		},
+		methods: {
+			goodImgLoad(){
+				this.$bus.$emit('imgLoadOver')
+			},
+			toDetail(){
+				this.$router.push({
+					path: '/detail',
+					query: {
+						iid: this.good.iid
+					}
+				})
 			}
 		}
 	}

@@ -2,7 +2,7 @@
 	<swiper>
 		<swiper-item v-for="(item,index) in banner" :key=index>
 			<a :href="item.link">
-				<img :src="item.image">
+				<img :src="item.image" >
 			</a>
 		</swiper-item>
 	</swiper>
@@ -14,6 +14,8 @@
 	
 	export default {
 		name: 'home-swiper',
+		methods:{
+		},
 		components: {
 			Swiper,SwiperItem
 		},

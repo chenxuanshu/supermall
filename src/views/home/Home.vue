@@ -3,11 +3,14 @@
 	<nav-bar class="home-nav">
 		<div slot="center">购物街</div>
 	</nav-bar>
-	<scroll class="content" ref="scroll" :probe-type="3" @isScroll='isScroll'>
+	<tab-control :tabControlTitle="['流行','新款','精选']" @tabClick="changeGooods"
+	 v-show="appear" class="tab-control-clone" ref="tabcontrolClone"/>
+	<scroll class="content" ref="scroll" :probe-type="3" :pullup='true' :pulldown="true" 
+	@isScroll='isScroll' @scrollEnd='loadMore'>
 		<home-swiper :banner='banner'/>
 		<home-recommend :recommend='recommend'/>
 		<feature-wrapper/>
-		<tab-control :tabControlTitle="['流行','新款','精选']" @tabClick="changeGooods"/>
+		<tab-control :tabControlTitle="['流行','新款','精选']" @tabClick="changeGooods" ref="tabcontrol"/>
 		<goods-list :goods="goods[currentGoods].list"/>
 	</scroll>
 	<back-top @click.native="backClick" v-show="isShow"/>
@@ -46,7 +49,9 @@ export default {
 		'sell': {page:0,list:[]}
 	},
 	currentGoods: 'pop',
-	isShow: false
+	isShow: false,
+	appear: false,
+	scrollY : -1000
   }},
   components: {
 	NavBar,HomeSwiper,HomeRecommend,FeatureWrapper,TabControl,GoodsList,Scroll,BackTop
@@ -65,6 +70,8 @@ export default {
 				this.currentGoods = 'sell'
 				break
 		  }
+		  this.$refs.tabcontrol.activeIndex = index
+		  this.$refs.tabcontrolClone.activeIndex = index
 	  },
 	getHomeMultida(){
 		getHomeMultidata().then(res=>{
@@ -78,14 +85,30 @@ export default {
 		let page = this.goods[type].page + 1
 		getHomeGoods(type,page).then(res=>{
 			this.goods[type].list.push(...(res.data.list))
+			this.goods[page] += 1
 		})
 		},
 	backClick(){
-		this.$refs.scroll.scroll.scrollTo(0,0,500)
+		this.$refs.scroll.scrollTo(0,0,500)
 	},
 	isScroll(p){
 		this.isShow = p.y < -500
-	}
+		this.appear = (-p.y) > 601
+	},
+	loadMore(){
+		this.getHomeGoodsda(this.currentGoods)
+		this.$refs.scroll.finishPullUp()
+	},
+	//图片加载防抖函数
+	// debounce(func,delay){
+	// 	let timer = null
+	// 	return function(){
+	// 		if(timer) clearTimeout(timer)
+	// 		timer = setTimeout(()=>{
+	// 			func
+	// 		},delay)
+	// 	}
+	// }
   },
   
   created(){
@@ -93,6 +116,18 @@ export default {
 	this.getHomeGoodsda('pop')
 	this.getHomeGoodsda('new')
 	this.getHomeGoodsda('sell')
+	
+  },
+  
+  mounted(){
+	  this.$bus.$on('imgLoadOver',()=>{
+		  this.$refs.scroll.refresh()
+	  })
+  },
+  activated(){
+  },
+  deactivated(){
+	  this.scrollY = this.$refs.scroll.scroll.y
   }
 }
 
@@ -107,10 +142,17 @@ export default {
 	.home-nav {
 		background-color: var(--color-tint);
 		color: white;
+		position: relative;
+		z-index: 99;
 	}
 	.content {
 		height: calc(100% - 93px);
-		margin-top: 44px;
 	}
-	
+	.tab-control-clone {
+		position: fixed;
+		top: 44px;
+		left: 0;
+		right: 0;
+		z-index: 99;
+	}
 </style>
