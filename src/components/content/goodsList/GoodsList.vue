@@ -1,6 +1,8 @@
 <template>
 	<div class="goods-list">
-		<goods-list-item v-for="(item,index) in goods" :key="index" :good="item" class="good-item"/>
+		<goods-list-item v-for="(item,index) in goods" :key="index" 
+		:good="item" :imageLength="imageLength" :recommendLength="recommendLength" :index="index"
+		 class="good-item"/>
 	</div>
 </template>
 
@@ -13,6 +15,14 @@
 			goods: {
 				type: Array,
 				default(){return []}
+			},
+			imageLength: {
+				type: Number,
+				default(){return 30}
+			},
+			recommendLength: {
+				type: Number,
+				default(){return 20}
 			}
 		},
 		components: {

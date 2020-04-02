@@ -23,6 +23,7 @@
 				</div>
 			</div>
 		</div>
+		<div v-else>暂无评论</div>
 	</div>
 	
 </template>
@@ -52,7 +53,7 @@
 </script>
 
 <style scoped="scoped">
-	.comment-info {
+	.detail-comment {
 		padding: 5px 12px;
 		color: #333;
 		border-bottom: 5px solid #f2f5f8;

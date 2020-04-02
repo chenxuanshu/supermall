@@ -11,7 +11,7 @@
 		<home-recommend :recommend='recommend'/>
 		<feature-wrapper/>
 		<tab-control :tabControlTitle="['流行','新款','精选']" @tabClick="changeGooods" ref="tabcontrol"/>
-		<goods-list :goods="goods[currentGoods].list"/>
+		<goods-list :goods="goods[currentGoods].list" :imageLength="imageLength"/>
 	</scroll>
 	<back-top @click.native="backClick" v-show="isShow"/>
 	
@@ -34,7 +34,7 @@
 	import BackTop from 'components/content/backTop/BackTop.vue'
 	
 	import {getHomeMultidata,getHomeGoods} from 'network/home-req.js'
-
+	
 
 export default {
   name: 'Home',
@@ -51,7 +51,8 @@ export default {
 	currentGoods: 'pop',
 	isShow: false,
 	appear: false,
-	scrollY : -1000
+	scrollY : 0,
+	imageLength: 30
   }},
   components: {
 	NavBar,HomeSwiper,HomeRecommend,FeatureWrapper,TabControl,GoodsList,Scroll,BackTop
@@ -88,9 +89,6 @@ export default {
 			this.goods[page] += 1
 		})
 		},
-	backClick(){
-		this.$refs.scroll.scrollTo(0,0,500)
-	},
 	isScroll(p){
 		this.isShow = p.y < -500
 		this.appear = (-p.y) > 601
@@ -99,18 +97,16 @@ export default {
 		this.getHomeGoodsda(this.currentGoods)
 		this.$refs.scroll.finishPullUp()
 	},
-	//图片加载防抖函数
-	// debounce(func,delay){
-	// 	let timer = null
-	// 	return function(){
-	// 		if(timer) clearTimeout(timer)
-	// 		timer = setTimeout(()=>{
-	// 			func
-	// 		},delay)
-	// 	}
-	// }
+	backClick(){
+		this.$refs.scroll.scrollTo(0,0,500)
+	}
   },
-  
+  watch: {
+		goods(){
+			this.imageLength = this.goods[currentGoods].list.length
+		}
+  },
+
   created(){
 	this.getHomeMultida()
 	this.getHomeGoodsda('pop')
@@ -120,11 +116,13 @@ export default {
   },
   
   mounted(){
-	  this.$bus.$on('imgLoadOver',()=>{
+	  this.$bus.$on('HimgLoadOver',()=>{
 		  this.$refs.scroll.refresh()
 	  })
   },
   activated(){
+	  this.$refs.scroll.refresh()
+	  this.$refs.scroll.scrollTo(0,this.scrollY,0)
   },
   deactivated(){
 	  this.scrollY = this.$refs.scroll.scroll.y

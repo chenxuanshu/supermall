@@ -1,6 +1,6 @@
 <template>
 	<div class="goods-list-item" @click="toDetail">
-		<img :src="good.show.img" @load="goodImgLoad">
+		<img v-lazy="image" @load="goodImgLoad">
 		<div class="goods-info">
 			<p>{{good.title}}</p>
 			<span class="price">{{rmbPrice}}</span>
@@ -16,26 +16,46 @@
 <script>
 	export default {
 		name: 'GoodListItem',
+		data(){return {
+		}},
 		props: {
 			good: {
 				type: Object,
 				default(){return {}}
+			},
+			imageLength: {
+				type: Number,
+				default(){return 30}
+			},
+			recommendLength: {
+				type: Number,
+				default(){return 20}
+			},
+			index: {
+				type: Number
 			}
 		},
 		computed:{
 			rmbPrice(){
 				return '￥'+this.good.price
+			},
+			image(){
+				return this.good.show ? this.good.show.img : this.good.image
 			}
 		},
 		methods: {
 			goodImgLoad(){
-				this.$bus.$emit('imgLoadOver')
+				if (this.$route.path.indexOf('home') !== -1 && this.index == this.imageLength - 1){
+					this.$bus.$emit('HimgLoadOver')
+				}else if(this.$route.path.indexOf('detail' !== -1) && this.index == this.recommendLength - 1){
+					this.$bus.$emit('DimgLoadOver')
+				}
 			},
 			toDetail(){
 				this.$router.push({
 					path: '/detail',
 					query: {
-						iid: this.good.iid
+						iid: this.good.iid ? this.good.iid : this.good.item_id
 					}
 				})
 			}

@@ -5,41 +5,37 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-	counter: 0,
-	students: [{id:0,name:'chen',age:19},{id:1,name:'liu',age:20},{id:2,name:'zhang',age:10}]
+	cartGoods: []
   },
   mutations: {
-	add(state){
-		state.counter = 10
+	addGood(state,good){
+		let oldGood = state.cartGoods.find(item => item.iid == good.iid)
+		if (oldGood){
+			oldGood.counter++
+		}else{
+			good.counter = 1
+			good.checked = false
+			state.cartGoods.push(good)
+		}
+	},
+	clickChecked(state,iid){
+		const theGood = state.cartGoods.find(item => item.iid == iid)
+		theGood.checked = ! theGood.checked
 	}
 	
   },
   getters: {
-	ageMore(state){return (age) => state.students.filter(s => s.age>age)}
+	cartLength(state){
+		return state.cartGoods.length
+	}
   },
   actions: {
-	  act(context,payload){
-		  return new Promise((res,rej)=>{
-			  setTimeout(()=>{
-				context.commit('add')
-				res(payload)  
-			  },1000)
-		  })
-		  
-	  }
-  },
-  modules: {
-	  a: {
-		  state: {
-			  teachers:[{id:0,name:'zhao',age:44},{id:1,name:'xia',age:54}]
-		  },
-		  getters: {
-			  filTea(state,getters,rootState){
-				  return state.teachers.filter(s=>s.age<50)
-			  }
-		  },
-		  mutations: {},
-		  actions: {}
-	  }
-  }
+	  addGood(context,good){
+		  return new Promise((res,rej) => {
+				// context.mutations.addGood(good)
+				context.commit('addGood',good)
+				res('加入成功')
+			})
+		}
+	}
 })
