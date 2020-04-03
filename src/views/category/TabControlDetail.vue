@@ -1,6 +1,6 @@
 <template>
-    <gird-view>
-        <goods-list-item v-for="(item,index) in categoryDetail" :key="index" :godos="item">
+    <gird-view class="gird-wrapper">
+        <goods-list-item v-for="(item,index) in categoryDetail" :key="index" :good="item" class="good-list-item">
         </goods-list-item>
     </gird-view>
 </template>
@@ -23,5 +23,9 @@ export default {
 
 
 <style scoped>
+    .gird-wrapper {
+        width: 300px;
+    }
+
 
 </style>

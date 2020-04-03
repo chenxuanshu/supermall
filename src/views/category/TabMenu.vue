@@ -27,7 +27,7 @@ export default {
     },
     methods: {
         itemClick(index) {
-            this.currrntIndex = index
+            this.currentIndex = index
             this.$emit('selectItem',index)
         }
     }
@@ -38,7 +38,7 @@ export default {
     #tab-menu {
         background-color: #f6f6f6;
         height: 100%;
-        width: 100px;
+        width: 200px;
         box-sizing: border-box;
     }
     .menu-list-item {
@@ -48,11 +48,10 @@ export default {
         font-size: 14px;
     }
     
-    .menu-list-item .active {
-        font-weight: 700;
-        color: var(--color-high-text);
+    .active {
+        color: var(--color-tint);
         background-color: #fff;
-        border-left: 3px solid var(--color-high-text);
+        border-left: 3px solid var(--color-tint);
     }
 
 </style>

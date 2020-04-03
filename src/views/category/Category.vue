@@ -5,11 +5,11 @@
 	</nav-bar>
 	<div class="content">
 		<tab-menu :categories="categories" @selectItem="selectItem"></tab-menu>
-		<scroll id="tab-control" :data="[categoryData]">
+		<scroll id="tab-control" :data="[categoryData]" ref="scroll">
 			<div>
-				<tab-control-category :subcategories="showSubcategory"></tab-control-category>
+				<tab-control-category :subcategories="showSubcategory" @imgLoad="imgRefresh"></tab-control-category>
 				<tab-control :tabControlTitle="['综合','新品','销量']" @itemClick="tabClick"></tab-control>
-				<tab-control-detail :category-detail="showCategoryDetail"></tab-control-detail>
+				<tab-control-detail :categoryDetail="showCategoryDetail"></tab-control-detail>
 			</div>
 		</scroll>
 	</div>
@@ -53,7 +53,7 @@
 			},
 			_getSubcategories(index) {
 				this.currentIndex = index
-				const mailKey = this.categories[index].mailKey
+				let mailKey = this.categories[index].maitKey
 				getSubcategory(mailKey).then(res => {
 					this.categoryData[index].subcategories = res.data
 					this.categoryData = {...this.categoryData}
@@ -74,6 +74,9 @@
 			},
 			tabClick(index){
 				this.currentIndex = index
+			},
+			imgRefresh(){
+				this.$refs.scroll.refresh()
 			}
 		},
 		created(){
@@ -86,7 +89,7 @@
 			},
 			showCategoryDetail() {
 				if (this.currentIndex == -1) return []
-				return this.categoryData[this.currentIndex].categoryDetail[this.currentType]
+				return this.categoryData[this.currentIndex].categoryDetail['']
 			}
 		}
 	}
@@ -96,6 +99,8 @@
 <style scoped="scoped">
 	.category-nav-bar {
 		background-color: var(--color-tint);
+		position: relative;
+		z-index: 999;
 	}
 	.category {
 		height: 100vh;

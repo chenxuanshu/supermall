@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="gird-wrapper">
         <gird-view :cols="3" :lineSpace="15" :v-margin="20" v-if="subcategories.list">
             <div class="item" v-for="(item,index) in subcategories.list" :key="index">
                 <a :href="item.link">
-                    <img :src="item.image" class="item-img" alt="">
+                    <img :src="item.image" class="item-img" alt="" @load="imgLoad">
                     <div class="item-text">{{item.title}}</div>
                 </a>
             </div>
@@ -21,17 +21,25 @@ export default {
             type: Object,
             default(){return {}}
         }
+    },
+    methods: {
+        imgLoad(){
+            this.$emit('imgLoad')
+        }
     }
 }
 </script>
 
 <style scoped>
+.gird-wrapper {
+    width: 310px;
+}
     .item {
         text-align: center;
         font-size: 12px;
     }
     .item-img {
-        widows: 80%;
+        width: 60%;
     }
     .item-text {
         margin-top: 15px;
